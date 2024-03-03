@@ -11,5 +11,5 @@ npm i prettier lint-staged husky ---save-dev
 	(format code)
 npm i mongoose 
 npm install mongoose-slug-updater --save-dev
-
+npm install method-override --save-dev
 
