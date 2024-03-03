@@ -55,6 +55,20 @@ class PartController {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   }
+  //[DELETE] /parts/:slug
+  async delete(req, res) {
+    try {
+      let updatedPart = await parts.findOneAndDelete(
+        { _id: req.params.id },
+        req.body,
+        { new: true },
+      );
+      res.redirect('back');
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
 }
 
 module.exports = new PartController();
