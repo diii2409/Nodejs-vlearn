@@ -1,35 +1,49 @@
 <h1 class='container'>homepage</h1>
 {{! ---------------------------------------------------- }}
-<div class='mt-4'>
-  <div class="form-check">
-    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-    <label class="form-check-label" for="defaultCheck1">
-      Select all
-    </label>
-  </div>
-  <div class='row'>
+<form name="container-form" method="POST" ='mt-4' action="/parts/handle-form-action">
 
-    {{#each parts}}
-      <div class='col-sm-6 col-lg-4'>
-        <div class='card' style='width: 18rem;'>
-          <div class='card-body'>
-            <h5 class='card-title'>{{this.name}}</h5>
-            <h5 class='card-title'>{{this.tuoi}}</h5>
-            <a href='/parts/{{this.slug}}' class='btn btn-primary'>Go detail</a>
-            <a
-              href='/'
-              class='btn btn-primary'
-              data-toggle='modal'
-              data-id='{{this._id}}'
-              data-target='#delete-part-modal'
-            >Delete</a>
+  <div class="mt-4 d-flex align-items-center">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="checkbox-all">
+      <label class="form-check-label" for="checkbox-all">
+        Select all
+      </label>
+    </div>
+    <select class="form-control form-control-sm checkbox-select-all-options" name ="action" required>
+      <option value="">--Choose option--</option>
+      <option value="delete">Delete</option>
+    </select>
+    <button class="btn btn-primary btn-sm btn-check-all-submit " disabled >execute</button>
+  </div>
+
+  <div class='modal-footer'></div>
+  <div class='mt-4 d-flex flex-wrap'>
+  {{#each parts}}
+    <div class='col-sm-6 col-lg-4 mt-4'>
+      <div class='card' style='width: 18rem;'>
+        <div class='card-body'>
+          <h5 class='card-title'>{{this.name}}</h5>
+          <h5 class='card-title'>{{this.tuoi}}</h5>
+          <a href='/parts/{{this.slug}}' class='btn btn-primary'>Go detail</a>
+          <a
+            href='/'
+            class='btn btn-primary'
+            data-toggle='modal'
+            data-id='{{this._id}}'
+            data-target='#delete-part-modal'
+          >Delete</a>
+          {{!-- form checked --}}
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="partIDs[]" value="{{this._id}}" >
           </div>
         </div>
       </div>
-
-    {{/each}}
-  </div>
+    </div>
+  {{/each}}
 </div>
+
+  
+</form>
 
 {{! Confirm delelte part}}
 <!-- Modal -->
@@ -73,23 +87,69 @@
   </div>
 </div>
 {{!-- Delete hidden form --}}
-<form name = 'delete-part-form' method='POST'></form>
+<form name='delete-part-form' method='POST'></form>
 
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    let partID ;
+    let partID;
     let deleteForm = document.forms["delete-part-form"];
+    let containerForm = document.forms["container-form"];
+    let checkboxAll = $('#checkbox-all')
+    let partItemCheckbox = $('input[name="partIDs[]"]')
+    let checkAllsubmitBtn = $('.btn-check-all-submit')
+
     // when dialog confirm clicked
-    $('#delete-part-modal').on('show.bs.modal', function (event) {
+    $('#delete-part-modal').on('show.bs.modal', function(event) {
       let button = $(event.relatedTarget);
       partID = button.data('id');
     });
+
     // when delete part btn clicked
     let btnDeletePart = document.getElementById('btn-delete-part');
     btnDeletePart.addEventListener('click', function() {
       deleteForm.action = 'parts/' + partID + "?_method=DELETE";
       deleteForm.submit();
     });
-  });
 
+    //checkbox all changed
+    checkboxAll.change(function() {
+      let isCheckedAll = $(this).prop('checked');
+      partItemCheckbox.prop('checked', isCheckedAll);
+      renderCheckAllExecBtn()
+    });
+    //part item checkbox changed
+    partItemCheckbox.change(function() {
+      let isCheckedAll = partItemCheckbox.length === $('input[name="partIDs[]"]:checked').length;
+      checkboxAll.prop('checked', isCheckedAll);
+      renderCheckAllExecBtn()
+    });
+    
+    //Check all submit button clicked
+
+    //  checkAllsubmitBtn.click( function(e) {
+    //   e.preventDefault();
+    //   let isSubmittable = $(this).hasClass('disabled');
+    //   if(!isSubmittable){
+    //     containerForm.submit();
+    //   }
+    //  });
+    //  $(containerForm).on('submit', function(e){
+    //    let isSubmittable = checkAllsubmitBtn.hasClass('disabled');
+    //    if (isSubmittable ) {
+    //      e.preventDefault();
+    //    }
+    //  });
+
+
+    // Re-render check all submit button
+    function renderCheckAllExecBtn(){
+      let checkedCount = $('input[name="partIDs[]"]:checked').length;
+      if(checkedCount){
+        //checkAllsubmitBtn.removeAttr('disabled');
+        checkAllsubmitBtn.attr('disabled', false);
+      } else {
+        checkAllsubmitBtn.attr('disabled', true);
+      }
+    }
+  });
 </script>

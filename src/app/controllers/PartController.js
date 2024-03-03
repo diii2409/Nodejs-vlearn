@@ -69,6 +69,24 @@ class PartController {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   }
+    //[POST] /parts/handle-form-action
+    async handleFormAction(req, res) {
+      try {
+        switch (req.body.action) {
+          case 'delete':
+            await parts.deleteMany({ _id: { $in: req.body.partIDs } });
+            res.redirect('back');
+          break;  
+
+          default: 
+            res.json({message: 'Action is invalid !!!!!!!',});
+        }
+        
+      } catch (error) {
+      }
+    }
 }
 
 module.exports = new PartController();
+
+// 
