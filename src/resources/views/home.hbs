@@ -1,0 +1,19 @@
+<h1 class='container'>homepage</h1>
+{{! ---------------------------------------------------- }}
+<div class='mt-4'>
+  <div class='row'>
+
+    {{#each parts}}
+      <div class='col-sm-6 col-lg-4'>
+        <div class='card' style='width: 18rem;'>
+          <div class='card-body'>
+            <h5 class='card-title'>{{this.name}}</h5>
+            <h5 class='card-title'>{{this.tuoi}}</h5>
+            <a href='/parts/{{this.slug}}' class='btn btn-primary'>Go detail</a>
+          </div>
+        </div>
+      </div>
+
+    {{/each}}
+  </div>
+</div>
