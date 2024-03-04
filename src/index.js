@@ -5,7 +5,8 @@ const morgan = require('morgan');
 const handlebars = require('express-handlebars').create({
   extname: 'hbs',
   helpers: {
-    sum: (a, b) => a + b,
+    // Building supporting tools in Handlebars
+    // sum: (a, b) => a + b,
   },
 });
 

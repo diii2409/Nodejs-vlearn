@@ -4,12 +4,12 @@ npm install express
 npm i nodemon --save-dev
 npm i morgan --save-dev
 	( theo doi cac response )
-npm i express-handlebar
+npm i express-handlebars
 npm i node-sass --save-dev
 	( convert scss => css )
 npm i prettier lint-staged husky ---save-dev
 	(format code)
-npm i mongoose 
+npm i mongoose --save-dev
 npm install mongoose-slug-updater --save-dev
 npm install method-override --save-dev
 
